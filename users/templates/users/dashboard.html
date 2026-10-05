@@ -1,0 +1,9 @@
+{% extends "users/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ user.username }}!</h1>
+<p>Email: {{ user.email }}</p>
+<p>This is your protected dashboard. Only logged-in users can see this.</p>
+{% endblock %}
