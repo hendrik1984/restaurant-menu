@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views
+from django.conf import settings
 # from django.views.generic import RedirectView
 
 
@@ -26,3 +27,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
 ]
+
+if settings.DEBUG:
+  urlpatterns += [
+    path('__reload__/', include('django_browser_reload.urls'))
+  ]
