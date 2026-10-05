@@ -18,17 +18,22 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views
 from django.conf import settings
+from django.conf.urls.static import static
+from menu import views as views_menu_list
 # from django.views.generic import RedirectView
 
 
 urlpatterns = [
-    path('', views.LoginView.as_view(template_name="users/login.html"), name="login"),
+    path("", views_menu_list.menu_list, name="menu_list"),
     # path('', RedirectView.as_view(url='admin/', permanent=False)),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
+    path('menu/', include('menu.urls')),
 ]
 
 if settings.DEBUG:
   urlpatterns += [
     path('__reload__/', include('django_browser_reload.urls'))
   ]
+  # media
+  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

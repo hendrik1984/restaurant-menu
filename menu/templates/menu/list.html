@@ -1,0 +1,125 @@
+{% extends "users/base.html" %}
+
+{% block title %}Menu — Fornace Nonna{% endblock %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto px-6 pt-14 pb-7">
+    <a href="{% url 'menu_list' %}" class="no-underline">
+        <h1 class="m-0 font-extrabold tracking-tight text-[clamp(52px,12vw,120px)] leading-[0.88]"
+            style="font-family: Fraunces, Georgia, serif; color: var(--red);">
+            Fornace<br>Nonna
+        </h1>
+    </a>
+    <p class="mt-4 max-w-[46ch]" style="color: var(--muted);">
+        Wood-fired pizza, 48-hour dough, baked in 90 seconds. Fired hot. Made with love.
+    </p>
+</div>
+
+<nav class="sticky top-0 z-10 -mx-6 px-6 border-b"
+     style="background: var(--bg); border-color: var(--line);">
+    <div class="flex items-center gap-2 py-3 overflow-x-auto" id="bar">
+        <button type="button" data-cat="all" aria-pressed="true"
+                class="flex-none rounded-full border px-4 py-2 text-sm font-medium"
+                style="border-color: var(--line); color: var(--ink);">
+            All
+        </button>
+        {% for category in categories %}
+            <button type="button" data-cat="{{ category.name|slugify }}" aria-pressed="false"
+                    class="flex-none rounded-full border px-4 py-2 text-sm font-medium"
+                    style="border-color: var(--line); color: var(--ink);">
+                {{ category.name }}
+            </button>
+        {% endfor %}
+    </div>
+</nav>
+
+<div class="pt-8" id="menu">
+    {% for category in categories %}
+        <section data-sec="{{ category.name|slugify }}" class="pt-10">
+            <h2 class="m-0 mb-1.5 font-extrabold leading-none"
+                style="font-family: Fraunces, Georgia, serif;
+                       font-size: clamp(30px, 5vw, 44px);">
+                {{ category.name }}
+            </h2>
+            {% if category.description %}
+                <p class="mb-5 text-sm" style="color: var(--muted);">{{ category.description }}</p>
+            {% endif %}
+
+            <ul class="fn-menu-list">
+                {% for item in category.items.all %}
+                    {% if item.is_available %}
+                        <li>
+                            {% if item.image %}
+                                <img class="ph" src="{{ item.image.url }}" alt="{{ item.name }}">
+                            {% else %}
+                                <div class="ph flex items-center justify-center text-xs"
+                                     style="color: var(--muted);">
+                                    No image
+                                </div>
+                            {% endif %}
+
+                            <div class="fn-row">
+                                <span class="fn-name">{{ item.name }}</span>
+                                <span class="fn-dots"></span>
+                                <span class="fn-price">{{ item.price }}</span>
+                            </div>
+
+                            {% if item.description %}
+                                <p class="fn-desc">{{ item.description }}</p>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% empty %}
+                    <li class="col-span-full text-sm" style="color: var(--muted);">
+                        No items in this category yet.
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% empty %}
+        <p style="color: var(--muted);">No menu categories yet.</p>
+    {% endfor %}
+</div>
+
+<div class="max-w-5xl mx-auto px-6 pb-12 text-sm mb-10" style="color: var(--muted);">
+    Prices in IDR. Tell your server about allergies before you order.
+</div>
+
+<script>
+(function () {
+    var currentCat = "all";
+    var sections = [].slice.call(document.querySelectorAll("section[data-sec]"));
+    var buttons = [].slice.call(document.querySelectorAll("[data-cat]"));
+
+    function render() {
+        sections.forEach(function (sec) {
+            var show = currentCat === "all" || sec.dataset.sec === currentCat;
+            sec.hidden = !show;
+        });
+    }
+
+    buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            currentCat = btn.dataset.cat;
+            buttons.forEach(function (b) {
+                var active = b === btn;
+                b.setAttribute("aria-pressed", active);
+                if (active) {
+                    b.style.background = "var(--red)";
+                    b.style.borderColor = "var(--red)";
+                    b.style.color = "var(--on-red)";
+                } else {
+                    b.style.background = "";
+                    b.style.borderColor = "var(--line)";
+                    b.style.color = "var(--ink)";
+                }
+            });
+            render();
+        });
+    });
+})();
+</script>
+
+{% endblock %}
+

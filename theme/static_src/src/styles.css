@@ -1,5 +1,7 @@
 @import "tailwindcss";
-
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
 /**
   * A catch-all path to Django template files, JavaScript, and Python files
   * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
@@ -8,3 +10,115 @@
   * the scope of this path.
   */
 @source "../../../**/*.{html,py,js}";
+
+/* ---- Fornace Nonna design tokens ---- */
+:root {
+  --bg:#F6EBD9;
+  --ink:#2B2623;
+  --muted:#6E6358;
+  --red:#C8341F;
+  --green:#3F5A2C;
+  --line:#CDBBA0
+}
+
+body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "DM Sans", system-ui, sans-serif;
+}
+
+/* Checkered strip */
+.fn-check {
+    height: 28px;
+    background:
+        conic-gradient(var(--red) 25%, transparent 0 50%, var(--red) 0 75%, transparent 0)
+        0 0 / 28px 28px;
+}
+
+/* Menu list: icon + name + dotted leader + price */
+.fn-menu-list {
+    list-style: none;
+    margin: 2vh;    
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 56px;
+}
+
+.fn-menu-list li {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    column-gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+    grid-column: auto;
+}
+
+.fn-menu-list li[hidden] {
+    display: none;
+}
+
+.fn-menu-list .ph {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 88px;
+    height: 88px;
+    border-radius: 18px;
+    background: #F0DFC2;
+    padding: 6px;
+}
+
+.fn-menu-list li:not(:has(.desc)) .ph {
+    grid-row: 1;
+}
+
+.fn-row {
+    grid-column: 2;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.fn-name {
+    font-weight: 700;
+    font-size: 19px;
+}
+
+.fn-dots {
+    flex: 1;
+    border-bottom: 2px dotted var(--line);
+    transform: translateY(-4px);
+    min-width: 16px;
+}
+
+.fn-price {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: 19px;
+    color: var(--red);
+}
+
+.fn-desc {
+    grid-column: 2;
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.fn-tag {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    padding: 0 5px;
+    vertical-align: 2px;
+}
+
+@media (max-width: 700px) {
+    .fn-menu-list { grid-template-columns: 1fr; }
+    .fn-menu-list li { grid-template-columns: 76px 1fr; }
+    .fn-menu-list .ph { width: 76px; height: 76px; }
+}
